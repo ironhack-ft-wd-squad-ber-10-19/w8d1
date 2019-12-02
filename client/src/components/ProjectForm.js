@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { Form, Button } from "react-bootstrap";
 
 class ProjectForm extends Component {
   state = {
@@ -54,9 +55,9 @@ class ProjectForm extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label htmlFor="title">Title: </label>
-        <input
+      <Form.Label onSubmit={this.handleSubmit}>
+        <Form.Label htmlFor="title">Title: </Form.Label>
+        <Form.Control
           type="text"
           name="title"
           id="title"
@@ -64,8 +65,8 @@ class ProjectForm extends Component {
           value={this.state.title}
         />
 
-        <label htmlFor="description">Description: </label>
-        <input
+        <Form.Label htmlFor="description">Description: </Form.Label>
+        <Form.Control
           type="text"
           name="description"
           id="description"
@@ -73,8 +74,8 @@ class ProjectForm extends Component {
           value={this.state.description}
         />
 
-        <button type="submit">Create a project</button>
-      </form>
+        <Button type="submit">Create a project</Button>
+      </Form.Label>
     );
   }
 }

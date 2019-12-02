@@ -4,7 +4,10 @@ import axios from "axios";
 class ProjectDetail extends Component {
   state = {
     project: null,
-    error: ""
+    error: "",
+    showForm: false,
+    title: "",
+    description: ""
   };
 
   componentDidMount() {
@@ -18,7 +21,9 @@ class ProjectDetail extends Component {
       .get(`/api/projects/${id}`)
       .then(response => {
         this.setState({
-          project: response.data
+          project: response.data,
+          title: response.data.title,
+          description: response.data.description
         });
       })
       .catch(err => {
@@ -45,10 +50,45 @@ class ProjectDetail extends Component {
       });
   };
 
+  toggleEdit = () => {
+    this.setState({
+      showForm: !this.state.showForm
+    });
+  };
+
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+
+    // const id = this.state.project._id
+
+    const id = this.props.match.params.id;
+    axios
+      .put(`/api/projects/${id}`, {
+        title: this.state.title,
+        description: this.state.description
+      })
+      .then(response => {
+        this.setState({
+          project: response.data,
+          // title: response.data.title,
+          // description: response.data.description,
+          showForm: false
+        });
+        console.log(response);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   render() {
-    console.log(this.state);
     if (this.state.error) {
-      // if error
       return <p>{this.state.error}</p>;
     } else if (this.state.project === null) {
       return <div></div>;
@@ -59,6 +99,29 @@ class ProjectDetail extends Component {
         <h1>{this.state.project.title}</h1>
         <p>{this.state.project.description}</p>
         <button onClick={this.deleteProject}>Delete Project</button>
+        <button onClick={this.toggleEdit}>Show Edit Form</button>
+        {this.state.showForm && (
+          <form onSubmit={this.handleSubmit}>
+            <h2>Edit form</h2>
+            <label htmlFor="title">Title: </label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              value={this.state.title}
+              onChange={this.handleChange}
+            />
+            <label htmlFor="description">Description: </label>
+            <input
+              type="text"
+              name="description"
+              id="description"
+              value={this.state.description}
+              onChange={this.handleChange}
+            />
+            <button type="submit">Edit</button>
+          </form>
+        )}
       </div>
     );
   }
