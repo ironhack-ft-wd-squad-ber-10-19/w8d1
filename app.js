@@ -72,4 +72,7 @@ app.locals.title = "Express - Generated with IronGenerator";
 const index = require("./routes/index");
 app.use("/", index);
 
+const projectRoutes = require("./routes/project");
+app.use("/api/projects", projectRoutes);
+
 module.exports = app;
