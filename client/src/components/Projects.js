@@ -8,7 +8,11 @@ class Projects extends Component {
     projects: []
   };
 
-  componentDidMount() {
+  // componentWillUnmount() {
+  //   console.log("PROJECTS UNMOUNT");
+  // }
+
+  getData = () => {
     // axios
     //   .get("http://localhost:5555/api/projects")
     axios
@@ -21,6 +25,10 @@ class Projects extends Component {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  componentDidMount() {
+    this.getData();
   }
 
   render() {
@@ -28,7 +36,7 @@ class Projects extends Component {
       <div>
         <h1>Projects</h1>
         <ProjectList projects={this.state.projects} />
-        <ProjectForm />
+        <ProjectForm refreshData={this.getData} />
       </div>
     );
   }
