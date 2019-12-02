@@ -33,8 +33,7 @@ class Projects extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Projects</h1>
+      <div className="projects-container">
         <ProjectList projects={this.state.projects} />
         <ProjectForm refreshData={this.getData} />
       </div>

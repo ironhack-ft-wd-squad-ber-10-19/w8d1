@@ -27,10 +27,6 @@ class ProjectForm extends Component {
     });
   };
 
-  handleClick = event => {
-    console.log(event.preventDefault);
-  };
-
   handleSubmit = event => {
     event.preventDefault();
     console.log("SUBMIT");
@@ -55,27 +51,31 @@ class ProjectForm extends Component {
 
   render() {
     return (
-      <Form.Label onSubmit={this.handleSubmit}>
-        <Form.Label htmlFor="title">Title: </Form.Label>
-        <Form.Control
-          type="text"
-          name="title"
-          id="title"
-          onChange={this.handleChange}
-          value={this.state.title}
-        />
+      <Form onSubmit={this.handleSubmit}>
+        <Form.Group>
+          <Form.Label htmlFor="title">Title: </Form.Label>
+          <Form.Control
+            type="text"
+            name="title"
+            id="title"
+            onChange={this.handleChange}
+            value={this.state.title}
+          />
+        </Form.Group>
 
-        <Form.Label htmlFor="description">Description: </Form.Label>
-        <Form.Control
-          type="text"
-          name="description"
-          id="description"
-          onChange={this.handleChange}
-          value={this.state.description}
-        />
+        <Form.Group>
+          <Form.Label htmlFor="description">Description: </Form.Label>
+          <Form.Control
+            type="text"
+            name="description"
+            id="description"
+            onChange={this.handleChange}
+            value={this.state.description}
+          />
+        </Form.Group>
 
         <Button type="submit">Create a project</Button>
-      </Form.Label>
+      </Form>
     );
   }
 }

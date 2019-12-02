@@ -1,16 +1,20 @@
 import React, { Component } from "react";
+import { Button, Form } from "react-bootstrap";
 import axios from "axios";
+import TaskForm from "./TaskForm";
+import TaskList from "./TaskList";
 
 class ProjectDetail extends Component {
   state = {
     project: null,
     error: "",
-    showForm: false,
+    editForm: false,
+    taskForm: false,
     title: "",
     description: ""
   };
 
-  componentDidMount() {
+  getData = () => {
     // get the data from the API
     // update the state accordingly
 
@@ -33,6 +37,10 @@ class ProjectDetail extends Component {
           });
         }
       });
+  };
+
+  componentDidMount() {
+    this.getData();
   }
 
   deleteProject = () => {
@@ -52,7 +60,7 @@ class ProjectDetail extends Component {
 
   toggleEdit = () => {
     this.setState({
-      showForm: !this.state.showForm
+      editForm: !this.state.editForm
     });
   };
 
@@ -78,7 +86,7 @@ class ProjectDetail extends Component {
           project: response.data,
           // title: response.data.title,
           // description: response.data.description,
-          showForm: false
+          editForm: false
         });
         console.log(response);
       })
@@ -98,30 +106,52 @@ class ProjectDetail extends Component {
       <div>
         <h1>{this.state.project.title}</h1>
         <p>{this.state.project.description}</p>
-        <button onClick={this.deleteProject}>Delete Project</button>
-        <button onClick={this.toggleEdit}>Show Edit Form</button>
-        {this.state.showForm && (
-          <form onSubmit={this.handleSubmit}>
+        <Button onClick={this.toggleEdit}>Show Edit Form</Button>
+        <Button
+          onClick={() => this.setState({ taskForm: !this.state.taskForm })}
+        >
+          Show Task form
+        </Button>
+        <Button variant="danger" onClick={this.deleteProject}>
+          Delete Project
+        </Button>
+
+        {this.state.editForm && (
+          <Form onSubmit={this.handleSubmit}>
             <h2>Edit form</h2>
-            <label htmlFor="title">Title: </label>
-            <input
-              type="text"
-              name="title"
-              id="title"
-              value={this.state.title}
-              onChange={this.handleChange}
-            />
-            <label htmlFor="description">Description: </label>
-            <input
-              type="text"
-              name="description"
-              id="description"
-              value={this.state.description}
-              onChange={this.handleChange}
-            />
-            <button type="submit">Edit</button>
-          </form>
+            <Form.Group>
+              <Form.Label htmlFor="title">Title: </Form.Label>
+              <Form.Control
+                type="text"
+                name="title"
+                id="title"
+                value={this.state.title}
+                onChange={this.handleChange}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="description">Description: </Form.Label>
+              <Form.Control
+                type="text"
+                name="description"
+                id="description"
+                value={this.state.description}
+                onChange={this.handleChange}
+              />
+            </Form.Group>
+            <Button type="submit">Edit</Button>
+          </Form>
         )}
+
+        {this.state.taskForm && (
+          <TaskForm
+            projectId={this.state.project._id}
+            getData={this.getData}
+            hideForm={() => this.setState({ taskForm: false })}
+          />
+        )}
+
+        <TaskList tasks={this.state.project.tasks} />
       </div>
     );
   }

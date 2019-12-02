@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const Project = require("../models/Project");
+const Task = require("../models/Task");
 
 // GET /api/projects
 router.get("/", (req, res) => {
   // return all projects
   Project.find({})
+    .populate("tasks")
     .then(projects => {
       res.json(projects);
     })
@@ -26,6 +28,7 @@ router.get("/:id", (req, res) => {
   }
 
   Project.findById(projectId)
+    .populate("tasks")
     .then(project => {
       if (!project) {
         res.status(404).json({ message: "Project not found" });
@@ -75,9 +78,11 @@ router.put("/:id", (req, res) => {
 // DELETE /api/projects/:id
 router.delete("/:id", (req, res) => {
   Project.findByIdAndDelete(req.params.id)
-    .then(deletedProject => {
-      // delete associated Tasks
-      res.json({ message: "ok" });
+    .then(project => {
+      // Deletes all the documents in the Task collection where the value for the `_id` field is present in the `project.tasks` array
+      return Task.deleteMany({ _id: { $in: project.tasks } }).then(() =>
+        res.json({ message: "ok" })
+      );
     })
     .catch(err => {
       res.status(500).json(err);
