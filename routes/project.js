@@ -43,11 +43,10 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
   // create 1 project
 
-  console.log(req.body);
-
   Project.create({
     title: req.body.title,
-    description: req.body.description
+    description: req.body.description,
+    owner: req.user._id
   })
     .then(project => {
       res.json(project);
