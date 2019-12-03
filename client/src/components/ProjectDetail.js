@@ -96,25 +96,37 @@ class ProjectDetail extends Component {
   };
 
   render() {
+    console.log(this.state, this.props);
     if (this.state.error) {
       return <p>{this.state.error}</p>;
     } else if (this.state.project === null) {
       return <div></div>;
     }
 
+    let canUpdate = false;
+
+    if (this.state.project.owner === this.props.user._id) {
+      canUpdate = true;
+    }
+    console.log(canUpdate);
     return (
       <div>
         <h1>{this.state.project.title}</h1>
         <p>{this.state.project.description}</p>
-        <Button onClick={this.toggleEdit}>Show Edit Form</Button>
-        <Button
-          onClick={() => this.setState({ taskForm: !this.state.taskForm })}
-        >
-          Show Task form
-        </Button>
-        <Button variant="danger" onClick={this.deleteProject}>
-          Delete Project
-        </Button>
+
+        {canUpdate && (
+          <>
+            <Button onClick={this.toggleEdit}>Show Edit Form</Button>
+            <Button
+              onClick={() => this.setState({ taskForm: !this.state.taskForm })}
+            >
+              Show Task form
+            </Button>
+            <Button variant="danger" onClick={this.deleteProject}>
+              Delete Project
+            </Button>
+          </>
+        )}
 
         {this.state.editForm && (
           <Form onSubmit={this.handleSubmit}>
