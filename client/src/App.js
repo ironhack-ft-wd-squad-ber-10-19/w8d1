@@ -9,7 +9,7 @@ import Signup from "./components/Signup";
 
 class App extends React.Component {
   state = {
-    user: null
+    user: this.props.user
   };
 
   setUser = user => {
@@ -21,7 +21,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Navbar user={this.state.user} />
+        <Navbar user={this.state.user} clearUser={this.setUser} />
         <Route exact path="/projects" component={Projects} />
         <Route exact path="/projects/:id" component={ProjectDetail} />
         <Route exact path="/tasks/:id" component={TaskDetail} />

@@ -28,4 +28,8 @@ const login = (username, password) => {
     });
 };
 
-export { signup, login };
+const logout = () => {
+  axios.delete("/api/auth/logout");
+};
+
+export { signup, login, logout };
